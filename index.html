@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-bind</title>
+    <script src="./vue.js"></script>
+
+    <style>
+        .verde {
+            color: green; 
+        }
+
+        .vermelho {
+            color: red;
+        }
+
+    </style>
+</head>
+<body>
+    <!--
+        Utilizando as API's
+        https://api.origamid.dev/stock/aapl/quote
+        https://api.origamid.dev/stock/googl/quote
+
+        - Compare o marketCap (valor de
+        mercado) entre ambas.
+
+        - Mostre o nome das empresas e o valor
+        na interace (companyName e marketCap).
+
+        - Mude a cor para verde o nome da empresa com
+        maior marketCap e vermelho a com menor.
+    -->
+    <div id="app">
+        <div>
+            <p>Nome: {{apple.companyName}}</p>
+            <div>Valor de mercado: <p :class="apple.marketCap > google.marketCap ? 'verde' : 'vermelho'">{{apple.marketCap}}</p></div>
+        </div>
+        <div>
+            <p>Nome: {{google.companyName}}</p>
+            <div>Valor de mercado: <p :class="google.marketCap > apple.marketCap ? 'verde' : 'vermelho'">{{google.marketCap}}</p></div>
+        </div>
+        <button @click="puxarDados">Pesquisar</button>
+    </div>
+    
+
+    <script>
+
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                apple: {},
+                google: {}
+            },
+            methods: {
+                fechApple(){
+                    fetch("https://api.origamid.dev/stock/aapl/quote")
+                    .then(resposta => resposta.json())
+                    .then(apple => {
+                        this.apple = apple
+                    })
+                },
+                fetchGoogle(){
+                    fetch("https://api.origamid.dev/stock/googl/quote")
+                    .then(resposta => resposta.json())
+                    .then(google => {
+                        this.google = google;
+                    })
+                },
+                puxarDados(){
+                    this.fechApple()
+                    this.fetchGoogle()
+                }
+            }
+
+        })
+        
+        
+    </script>
+
+
+    
+</body>
+</html>
